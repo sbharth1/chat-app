@@ -1,2 +1,3 @@
 server/.env
 client/.env
+server/node_modules
