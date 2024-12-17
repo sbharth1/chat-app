@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom"
 
 const Login = () => {
-  return (<>
+  return (
+  <>
      <h1>Login</h1>
     <input type="text" />
     <button>send</button>
