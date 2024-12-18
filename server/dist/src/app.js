@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+//  import http from 'http'
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const userSchema_1 = __importDefault(require("../models/userSchema"));
@@ -23,6 +24,8 @@ app.use((0, cors_1.default)({
     origin: "http://localhost:5173",
     methods: ['GET', 'POST',]
 }));
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
 dotenv_1.default.config();
 const PORT = process.env.PORT;
 const CONNECT_DB = process.env.CONNECT_DB;
@@ -37,6 +40,7 @@ function connectDB() {
         })
             .catch((error) => {
             console.log(error + " error connection to MongoDB!!");
+            process.exit(1);
         });
     });
 }
