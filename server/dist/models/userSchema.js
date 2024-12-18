@@ -21,13 +21,13 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    password_hash: {
+    password: {
         type: String,
-        required: true
+        required: true,
     },
     date_of_birth: {
         type: Date,
-        require: true
+        required: true
     }
 }, { timestamps: true });
 const User = model("user", userSchema);

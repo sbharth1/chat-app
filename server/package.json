@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/src/app.js",  
+    "start": "node dist/src/app.js",
     "build": "tsc",
     "dev": "tsc --watch && nodemon ./dist/src/app.js"
   },
