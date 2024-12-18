@@ -26,7 +26,7 @@ const userSchema = new Schema({
         required: true,
     },
     date_of_birth: {
-        type: Date,
+        type: String,
         required: true
     }
 }, { timestamps: true });

@@ -50,16 +50,21 @@ const asyncHandler = (fn) => {
         Promise.resolve(fn(req, res, next)).catch(next);
     };
 };
-app.get("/api/chat", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
+app.get("/api/getdata", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let result = yield userSchema_1.default.find();
-        res.send("data entered sucessfully!!  ---" + result);
+        res.status(200).json({
+            message: "Data fetched successfully!",
+            data: result,
+        });
     }
     catch (error) {
-        res.status(500).send("Server Error: " + error.message);
+        res.status(500).json({
+            message: "Server Error",
+            error: error.message,
+        });
     }
-}));
+})));
 app.post("/api/chat", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     try {

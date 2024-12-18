@@ -6,7 +6,7 @@ interface IUser {
  lastName:string,
  email:string,
  password:string,
- date_of_birth:Date,
+ date_of_birth:String,
 }
 
 const userSchema = new Schema<IUser>({
@@ -33,7 +33,7 @@ const userSchema = new Schema<IUser>({
     },
 
     date_of_birth:{
-     type:Date,
+     type:String,
      required:true
     }
 },{timestamps:true})

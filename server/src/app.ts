@@ -47,15 +47,20 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
  };
  
    
-    app.get("/api/chat",async (req:Request,res:Response)=>{
-      console.log(req.body);
+    app.get("/api/getdata", asyncHandler( async (req:Request,res:Response)=>{
       try {
         let result =  await User.find();
-         res.send("data entered sucessfully!!  ---" + result);
+       res.status(200).json({
+         message: "Data fetched successfully!",
+         data: result,
+       })
        } catch (error:any) {
-         res.status(500).send("Server Error: " + error.message);
+         res.status(500).json({
+            message: "Server Error",
+            error: error.message,
+         })
        }
-    })
+    }));
 
 
 
@@ -81,6 +86,7 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
      }
  }));
 
+ 
  app.listen(PORT,()=>{
     console.log("http://localhost"+PORT);
  });
