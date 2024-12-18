@@ -15,9 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 // import http from 'http'
 const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = __importDefault(require("dotenv"));
 const userSchema_1 = __importDefault(require("../models/userSchema"));
 // import { connectDB } from '../config/connect';
 const mongoose_1 = __importDefault(require("mongoose"));
+const app = (0, express_1.default)();
+dotenv_1.default.config();
+const PORT = process.env.PORT;
 function connectDB() {
     return __awaiter(this, void 0, void 0, function* () {
         mongoose_1.default.connect("mongodb://127.0.0.01/")
@@ -30,14 +34,30 @@ function connectDB() {
     });
 }
 ;
-const app = (0, express_1.default)();
-// const server = http.createServer(app)
-app.use((0, cors_1.default)());
+// const server = http.createServer(app);
+app.use((0, cors_1.default)({ origin: "http://localhost:4000" }));
 app.get("/api/chat", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield connectDB();
-    const { userName, lastName } = req.body;
-    const user = new userSchema_1.default({ userName, lastName });
-    yield user.save();
-    res.send("hello world");
+    console.log(req.body);
+    try {
+        res.send("data entered sucessfully!!");
+    }
+    catch (error) {
+        res.status(500).send("Server Error: " + error.message);
+    }
 }));
-app.listen(3000);
+app.post("/api/chat", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
+    try {
+        yield connectDB();
+        const { userName, lastName } = req.body;
+        const user = new userSchema_1.default({ userName, lastName });
+        yield user.save();
+        res.send("hello world");
+    }
+    catch (error) {
+        res.status(500).send("Server Error: " + error.message);
+    }
+}));
+app.listen(PORT, () => {
+    console.log("http://localhost" + PORT);
+});
