@@ -51,10 +51,13 @@ const asyncHandler = (fn) => {
     };
 };
 app.get("/api/getdata", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.query, '---query');
     try {
+        yield connectDB();
         let result = yield userSchema_1.default.find();
+        console.log(result, '---result');
         res.status(200).json({
-            message: "Data fetched successfully!",
+            message: "Data fetched successfully",
             data: result,
         });
     }

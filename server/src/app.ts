@@ -48,10 +48,13 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
  
    
     app.get("/api/getdata", asyncHandler( async (req:Request,res:Response)=>{
+      console.log(req.query,'---query')
       try {
+        await connectDB();
         let result =  await User.find();
+        console.log(result,'---result')
        res.status(200).json({
-         message: "Data fetched successfully!",
+         message: "Data fetched successfully",
          data: result,
        })
        } catch (error:any) {
