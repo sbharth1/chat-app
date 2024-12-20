@@ -1,18 +1,11 @@
 import  React, { FormEvent, useState } from 'react';
 import { Link } from "react-router-dom"
+import { SignupFormData } from '../types';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
 
 const Signup = () => {
 
-  interface FormType {
-    userName:string,
-    lastName:string,
-    email:string,
-    password:string,
-    dateOfBirth:string
-  }
-
-  const [formData, setFormData] = useState<FormType>({
+  const [formData, setFormData] = useState<SignupFormData>({
     userName:"",
     lastName:"",
     email: "",

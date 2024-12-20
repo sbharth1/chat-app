@@ -63,7 +63,6 @@ app.post("/api/signup", asyncHandler((req, res) => __awaiter(void 0, void 0, voi
             });
         }
         let result = yield userSchema_1.default.findOne({ email });
-        console.log(result, '---result');
         res.status(200).json({
             message: "Data fetched successfully",
             data: result,

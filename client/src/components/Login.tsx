@@ -1,22 +1,18 @@
 import  React, { FormEvent, useState } from 'react';
 import { Link } from "react-router-dom"
+import { LoginFormData } from '../types';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
 
 const Login = () => {
+   
 
-  interface LoginType {
-    email:string,
-    password:string,
-  }
-
-  const [loginData, setLoginData] = useState<LoginType>({
+  const [loginData, setLoginData] = useState<LoginFormData>({
     email: '',
     password: '',
   });
 
-  const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   console.log(loginData);
    setLoginData({
     email:"",
     password:"",
