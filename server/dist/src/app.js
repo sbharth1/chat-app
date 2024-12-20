@@ -19,7 +19,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const userSchema_1 = __importDefault(require("../models/userSchema"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const jwtUtils_1 = require("../utils/jwtUtils");
 const app = (0, express_1.default)();
 //  const server = http.createServer(app);
 app.use((0, cors_1.default)({
@@ -31,7 +31,6 @@ app.use(express_1.default.urlencoded({ extended: true }));
 dotenv_1.default.config();
 const PORT = process.env.PORT;
 const CONNECT_DB = process.env.CONNECT_DB;
-const SECRET_KEY = process.env.SECRET_KEY;
 if (!CONNECT_DB) {
     console.log("error connecting in mongodb!!");
 }
@@ -87,7 +86,7 @@ app.post("/api/login", asyncHandler((req, res) => __awaiter(void 0, void 0, void
         }
         const salt = yield bcryptjs_1.default.genSalt(15);
         const hashPassword = yield bcryptjs_1.default.hash(password, salt);
-        const token = jsonwebtoken_1.default.sign({ email }, SECRET_KEY, { expiresIn: '1h' });
+        const token = (0, jwtUtils_1.generateToken)(email);
         const user = new userSchema_1.default({ userName, lastName, email, password: hashPassword, date_of_birth, token });
         yield user.save();
         res.status(201).json({

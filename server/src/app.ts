@@ -5,7 +5,7 @@
  import User from '../models/userSchema' 
  import mongoose from 'mongoose'
  import bcrypt from 'bcryptjs'
- import jwt from 'jsonwebtoken'
+ import {generateToken} from '../utils/jwtUtils'
  const app = express();
 //  const server = http.createServer(app);
  
@@ -22,7 +22,6 @@
  dotenv.config();
  const PORT = process.env.PORT;
  const CONNECT_DB  = process.env.CONNECT_DB;
- const SECRET_KEY = process.env.SECRET_KEY!;
 
  if(!CONNECT_DB ){
    console.log("error connecting in mongodb!!")
@@ -88,10 +87,11 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
 
      const salt = await bcrypt.genSalt(15);
      const hashPassword = await bcrypt.hash(password,salt);
-     const token = jwt.sign({email},SECRET_KEY,{expiresIn:'1h'})
+    const token = generateToken(email);
     
 
      const user = new User({ userName, lastName,email,password:hashPassword,date_of_birth,token});
+     
      await user.save();
 
      res.status(201).json({ 
