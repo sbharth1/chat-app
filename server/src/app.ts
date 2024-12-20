@@ -4,6 +4,8 @@
  import dotenv from 'dotenv'
  import User from '../models/userSchema' 
  import mongoose from 'mongoose'
+ import bcrypt from 'bcryptjs'
+ import jwt from 'jsonwebtoken'
  const app = express();
 //  const server = http.createServer(app);
  
@@ -20,6 +22,7 @@
  dotenv.config();
  const PORT = process.env.PORT;
  const CONNECT_DB  = process.env.CONNECT_DB;
+ const SECRET_KEY = process.env.SECRET_KEY!;
 
  if(!CONNECT_DB ){
    console.log("error connecting in mongodb!!")
@@ -47,11 +50,17 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
  };
  
    
-    app.get("/api/getdata", asyncHandler( async (req:Request,res:Response)=>{
-      console.log(req.query,'---query')
+    app.post("/api/signup", asyncHandler( async (req:Request,res:Response)=>{
       try {
+
         await connectDB();
-        let result =  await User.find();
+        const {email,password} = req.body;
+        if(!email || !password){
+          return res.status(400).json({ 
+            message: "email and password is invalid", 
+         });
+        }
+        let result =  await User.findOne({email});
         console.log(result,'---result')
        res.status(200).json({
          message: "Data fetched successfully",
@@ -67,22 +76,29 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
 
 
 
- app.post("/api/chat", asyncHandler(async (req: Request,res: Response) => {
+ app.post("/api/login", asyncHandler(async (req: Request,res: Response) => {
     console.log(req.body);
     try {
         await connectDB();
-       const { userName, lastName,email,password,date_of_birth } = req.body;
+       const { userName, lastName,email,password,date_of_birth} = req.body;
      if (!userName || !lastName || !email || !password || !date_of_birth) {
        return res.status(400).json({ 
          message: "Username and last name are required" 
       });
      }
-     const user = new User({ userName, lastName,email,password,date_of_birth });
+
+     const salt = await bcrypt.genSalt(15);
+     const hashPassword = await bcrypt.hash(password,salt);
+     const token = jwt.sign({email},SECRET_KEY,{expiresIn:'1h'})
+    
+
+     const user = new User({ userName, lastName,email,password:hashPassword,date_of_birth,token});
      await user.save();
 
      res.status(201).json({ 
        message: "User created successfully", 
-       user: { userName, lastName,email,password,date_of_birth } 
+       token,
+       user: { userName, lastName,email,date_of_birth }
           });
      } catch (error:any) {
        res.status(500).send("Server Error: " + error.message);

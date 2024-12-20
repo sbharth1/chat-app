@@ -18,6 +18,8 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const userSchema_1 = __importDefault(require("../models/userSchema"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const app = (0, express_1.default)();
 //  const server = http.createServer(app);
 app.use((0, cors_1.default)({
@@ -29,6 +31,7 @@ app.use(express_1.default.urlencoded({ extended: true }));
 dotenv_1.default.config();
 const PORT = process.env.PORT;
 const CONNECT_DB = process.env.CONNECT_DB;
+const SECRET_KEY = process.env.SECRET_KEY;
 if (!CONNECT_DB) {
     console.log("error connecting in mongodb!!");
 }
@@ -50,11 +53,16 @@ const asyncHandler = (fn) => {
         Promise.resolve(fn(req, res, next)).catch(next);
     };
 };
-app.get("/api/getdata", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.query, '---query');
+app.post("/api/signup", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield connectDB();
-        let result = yield userSchema_1.default.find();
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({
+                message: "email and password is invalid",
+            });
+        }
+        let result = yield userSchema_1.default.findOne({ email });
         console.log(result, '---result');
         res.status(200).json({
             message: "Data fetched successfully",
@@ -68,7 +76,7 @@ app.get("/api/getdata", asyncHandler((req, res) => __awaiter(void 0, void 0, voi
         });
     }
 })));
-app.post("/api/chat", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/login", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     try {
         yield connectDB();
@@ -78,11 +86,15 @@ app.post("/api/chat", asyncHandler((req, res) => __awaiter(void 0, void 0, void 
                 message: "Username and last name are required"
             });
         }
-        const user = new userSchema_1.default({ userName, lastName, email, password, date_of_birth });
+        const salt = yield bcryptjs_1.default.genSalt(15);
+        const hashPassword = yield bcryptjs_1.default.hash(password, salt);
+        const token = jsonwebtoken_1.default.sign({ email }, SECRET_KEY, { expiresIn: '1h' });
+        const user = new userSchema_1.default({ userName, lastName, email, password: hashPassword, date_of_birth, token });
         yield user.save();
         res.status(201).json({
             message: "User created successfully",
-            user: { userName, lastName, email, password, date_of_birth }
+            token,
+            user: { userName, lastName, email, date_of_birth }
         });
     }
     catch (error) {

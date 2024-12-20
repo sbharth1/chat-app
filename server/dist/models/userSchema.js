@@ -28,6 +28,9 @@ const userSchema = new Schema({
     date_of_birth: {
         type: String,
         required: true
+    },
+    token: {
+        type: String,
     }
 }, { timestamps: true });
 const User = model("user", userSchema);
