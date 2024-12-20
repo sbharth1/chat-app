@@ -61,7 +61,6 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
          });
         }
         let result =  await User.findOne({email});
-        console.log(result,'---result')
        res.status(200).json({
          message: "Data fetched successfully",
          data: result,

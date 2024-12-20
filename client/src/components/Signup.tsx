@@ -1,14 +1,141 @@
+import  React, { FormEvent, useState } from 'react';
 import { Link } from "react-router-dom"
+import { TextField, Button, Container, Box, Typography } from '@mui/material';
 
 const Signup = () => {
+
+  interface FormType {
+    userName:string,
+    lastName:string,
+    email:string,
+    password:string,
+    dateOfBirth:string
+  }
+
+  const [formData, setFormData] = useState<FormType>({
+    userName:"",
+    lastName:"",
+    email: "",
+    password: "",
+    dateOfBirth:""
+  });
+
+  const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+   console.log(formData);
+   setFormData({
+    userName:"",
+    lastName:"",
+    email: "",
+    password: "",
+    dateOfBirth:""
+   })
+    alert('Sign up successful!');
+  };
+
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
   return (<>
-    <h1>Signup</h1>
-      <input type="text" />
-      <button>send</button>
-      <Link to={"/login"}>signup page</Link>
+  <Box  sx={{
+        display: 'flex',
+        justifyContent: 'center', 
+        alignItems: 'center',     
+        minHeight: '100vh',      
+        backgroundColor: '#f4f4f9'
+      }}>
+    <Container maxWidth="xs">
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+         alignItems: 'center',
+          padding: 3,
+          borderRadius: 2,
+          boxShadow: 3,
+          backgroundColor: '#fff'
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
+          Sign Up
+        </Typography>
 
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}> 
+        <TextField
+            label="UserName"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            name="userName"
+            value={formData.userName}
+            onChange={handleChange}
+          />         
+
+         <TextField
+            label="LastName"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+
+          <TextField
+            label="Email"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          
+          <TextField
+            label="Password"
+            variant="outlined"
+            type="password"
+            fullWidth
+            margin="normal"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+            <TextField
+            type='date'
+            fullWidth
+            margin="normal"
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
+            onChange={handleChange}
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            Sign Up
+          </Button>
+        </form>
+      </Box>
+    <Link to={"/"}>signup page</Link> 
+    </Container>
+    </Box>
     </>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;
+
+
+
+
+
