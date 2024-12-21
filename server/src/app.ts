@@ -1,5 +1,5 @@
  import express,{Request,Response,NextFunction} from 'express'
-//  import http from 'http'
+ import http from 'http'
  import cors from 'cors'
  import dotenv from 'dotenv'
  import User from '../models/userSchema' 
@@ -7,7 +7,7 @@
  import bcrypt from 'bcryptjs'
  import {generateToken} from '../utils/jwtUtils'
  const app = express();
-//  const server = http.createServer(app);
+ const server = http.createServer(app);
  
  app.use(cors({
       origin:"http://localhost:5173",
@@ -106,7 +106,7 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
  }));
 
  
- app.listen(PORT,()=>{
+ server.listen(PORT,()=>{
     console.log("http://localhost"+PORT);
  });
 

@@ -131,7 +131,7 @@ const Signup = () => {
           </Button>
         </form>
       </Box>
-    <Link to={"/"}>signup page</Link> 
+    <Link to={"/"}>Login page</Link> 
     </Container>
     </Box>
     </>
