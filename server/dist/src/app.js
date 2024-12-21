@@ -52,7 +52,7 @@ const asyncHandler = (fn) => {
         Promise.resolve(fn(req, res, next)).catch(next);
     };
 };
-app.post("/api/signup", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/login", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield connectDB();
         const { email, password } = req.body;
@@ -62,8 +62,10 @@ app.post("/api/signup", asyncHandler((req, res) => __awaiter(void 0, void 0, voi
             });
         }
         let result = yield userSchema_1.default.findOne({ email });
+        const token = (0, jwtUtils_1.generateToken)(email);
         res.status(200).json({
             message: "Data fetched successfully",
+            token,
             data: result,
         });
     }
@@ -74,25 +76,24 @@ app.post("/api/signup", asyncHandler((req, res) => __awaiter(void 0, void 0, voi
         });
     }
 })));
-app.post("/api/login", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/signup", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     try {
         yield connectDB();
-        const { userName, lastName, email, password, date_of_birth } = req.body;
-        if (!userName || !lastName || !email || !password || !date_of_birth) {
+        const { userName, lastName, email, password, dateOfBirth } = req.body;
+        console.log(req.body);
+        if (!userName || !lastName || !email || !password || !dateOfBirth) {
             return res.status(400).json({
                 message: "Username and last name are required"
             });
         }
         const salt = yield bcryptjs_1.default.genSalt(15);
         const hashPassword = yield bcryptjs_1.default.hash(password, salt);
-        const token = (0, jwtUtils_1.generateToken)(email);
-        const user = new userSchema_1.default({ userName, lastName, email, password: hashPassword, date_of_birth, token });
+        const user = new userSchema_1.default({ userName, lastName, email, password: hashPassword, dateOfBirth });
         yield user.save();
         res.status(201).json({
             message: "User created successfully",
-            token,
-            user: { userName, lastName, email, date_of_birth }
+            user: { userName, lastName, email, dateOfBirth, }
         });
     }
     catch (error) {

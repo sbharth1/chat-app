@@ -1,6 +1,8 @@
 import  React, { FormEvent, useState } from 'react';
 import { Link } from "react-router-dom"
 import { LoginFormData } from '../types';
+import axios from 'axios'
+import Cookies from 'js-cookie';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
 
 const Login = () => {
@@ -13,11 +15,29 @@ const Login = () => {
 
   const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   setLoginData({
-    email:"",
-    password:"",
+    e.preventDefault();
+    try{
+   
+   const response =  await axios.post("http://localhost:4000/api/login",loginData,{
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    
    })
-    alert('Sign up successful!');
+   const token = response.data.token;
+   Cookies.set(
+    "token",
+    token,
+    { expires: 7, secure: true, sameSite: 'Strict' }
+   )
+  }catch(error){
+    console.log(error + "---response error")
+  }
+   setLoginData({
+    email: "",
+    password: "",
+   })
+    alert('Login up successful!');
   };
 
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +113,7 @@ const Login = () => {
 };
 
 export default Login;
+
 
 
 

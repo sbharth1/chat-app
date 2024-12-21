@@ -49,7 +49,7 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
  };
  
    
-    app.post("/api/signup", asyncHandler( async (req:Request,res:Response)=>{
+    app.post("/api/login", asyncHandler( async (req:Request,res:Response)=>{
       try {
 
         await connectDB();
@@ -57,11 +57,13 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
         if(!email || !password){
           return res.status(400).json({ 
             message: "email and password is invalid", 
-         });
+          });
         }
-        let result =  await User.findOne({email});
-       res.status(200).json({
+        let result = await User.findOne({email});
+        const token = generateToken(email);
+           res.status(200).json({
          message: "Data fetched successfully",
+         token,
          data: result,
        })
        } catch (error:any) {
@@ -74,30 +76,29 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
 
 
 
- app.post("/api/login", asyncHandler(async (req: Request,res: Response) => {
+ app.post("/api/signup", asyncHandler(async (req: Request,res: Response) => {
     console.log(req.body);
     try {
         await connectDB();
-       const { userName, lastName,email,password,date_of_birth} = req.body;
-     if (!userName || !lastName || !email || !password || !date_of_birth) {
+       const { userName, lastName,email,password,dateOfBirth} = req.body;
+       console.log(req.body);
+     if (!userName || !lastName || !email || !password || !dateOfBirth) {
        return res.status(400).json({ 
          message: "Username and last name are required" 
       });
      }
-
+   
      const salt = await bcrypt.genSalt(15);
      const hashPassword = await bcrypt.hash(password,salt);
-    const token = generateToken(email);
     
 
-     const user = new User({ userName, lastName,email,password:hashPassword,date_of_birth,token});
-     
+     const user = new User({ userName, lastName,email,password:hashPassword,dateOfBirth});
+
      await user.save();
 
      res.status(201).json({ 
        message: "User created successfully", 
-       token,
-       user: { userName, lastName,email,date_of_birth }
+       user: { userName, lastName,email,dateOfBirth, }
           });
      } catch (error:any) {
        res.status(500).send("Server Error: " + error.message);

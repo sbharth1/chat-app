@@ -1,6 +1,7 @@
 import  React, { FormEvent, useState } from 'react';
 import { Link } from "react-router-dom"
-import { SignupFormData } from '../types';
+import { SignupFormData } from '../types'
+import axios from 'axios'
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
 
 const Signup = () => {
@@ -13,9 +14,20 @@ const Signup = () => {
     dateOfBirth:""
   });
 
-  const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   console.log(formData);
+    try{
+   
+   const response =  await axios.post("http://localhost:4000/api/signup",formData,{
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    
+   })
+   console.log(response);
+  }catch(error){
+    console.log(error + "---response error")
+  }
    setFormData({
     userName:"",
     lastName:"",

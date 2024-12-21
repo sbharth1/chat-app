@@ -6,9 +6,7 @@ interface IUser {
  lastName:string,
  email:string,
  password:string,
- date_of_birth:String,
- token:String,
-
+ dateOfBirth:String,
 }
 
 const userSchema = new Schema<IUser>({
@@ -34,13 +32,10 @@ const userSchema = new Schema<IUser>({
       required:true,
     },
 
-    date_of_birth:{
+    dateOfBirth:{
      type:String,
      required:true
     },
-   token:{
-    type:String,
-   }
 },{timestamps:true})
 
 const User = model<IUser>("user",userSchema);

@@ -25,13 +25,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    date_of_birth: {
+    dateOfBirth: {
         type: String,
         required: true
     },
-    token: {
-        type: String,
-    }
 }, { timestamps: true });
 const User = model("user", userSchema);
 exports.default = User;
