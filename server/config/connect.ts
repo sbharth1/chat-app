@@ -8,7 +8,7 @@ if(!CONNECT_DB){
    console.error("MonogDB_URL is not defined in env file!!");
 }
 
-export async function connectDB(){
+ async function connectDB(){
    mongoose.connect(CONNECT_DB)
    .then(()=>{
       console.log("Connected MongoDB!!")
@@ -18,3 +18,5 @@ export async function connectDB(){
    })
 
 };
+
+export default connectDB;

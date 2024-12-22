@@ -3,11 +3,11 @@
  import cors from 'cors'
  import dotenv from 'dotenv'
  import User from '../models/userSchema' 
- import mongoose from 'mongoose'
  import bcrypt from 'bcryptjs'
  import {generateToken} from '../utils/jwtUtils'
  const app = express();
  const server = http.createServer(app);
+import connectDB from '../config/connect'
  
  app.use(cors({
       origin:"http://localhost:5173",
@@ -21,25 +21,6 @@
 
  dotenv.config();
  const PORT = process.env.PORT;
- const CONNECT_DB  = process.env.CONNECT_DB;
-
- if(!CONNECT_DB ){
-   console.log("error connecting in mongodb!!")
- }
-
- async function connectDB(){
-    mongoose.connect(CONNECT_DB!)
-    .then(()=>{
-        console.log("Connected MongoDB!!")
-    })
-    .catch((error)=>{
-       console.log(error+ " error connection to MongoDB!!");
-       process.exit(1);
-    })
-
- };
-
-
 
 const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
    return (req: Request, res: 
@@ -80,7 +61,7 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
     try {
         await connectDB();
        const { userName, lastName,email,password,dateOfBirth} = req.body;
-       console.log(req.body);
+
      if (!userName || !lastName || !email || !password || !dateOfBirth) {
        return res.status(400).json({ 
          message: "Username and last name are required" 

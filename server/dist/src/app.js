@@ -17,11 +17,11 @@ const http_1 = __importDefault(require("http"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const userSchema_1 = __importDefault(require("../models/userSchema"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwtUtils_1 = require("../utils/jwtUtils");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
+const connect_1 = __importDefault(require("../config/connect"));
 app.use((0, cors_1.default)({
     origin: "http://localhost:5173",
     methods: ['GET', 'POST',]
@@ -30,23 +30,6 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 dotenv_1.default.config();
 const PORT = process.env.PORT;
-const CONNECT_DB = process.env.CONNECT_DB;
-if (!CONNECT_DB) {
-    console.log("error connecting in mongodb!!");
-}
-function connectDB() {
-    return __awaiter(this, void 0, void 0, function* () {
-        mongoose_1.default.connect(CONNECT_DB)
-            .then(() => {
-            console.log("Connected MongoDB!!");
-        })
-            .catch((error) => {
-            console.log(error + " error connection to MongoDB!!");
-            process.exit(1);
-        });
-    });
-}
-;
 const asyncHandler = (fn) => {
     return (req, res, next) => {
         Promise.resolve(fn(req, res, next)).catch(next);
@@ -54,7 +37,7 @@ const asyncHandler = (fn) => {
 };
 app.post("/api/login", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield connectDB();
+        yield (0, connect_1.default)();
         const { email, password } = req.body;
         if (!email || !password) {
             return res.status(400).json({
@@ -79,9 +62,8 @@ app.post("/api/login", asyncHandler((req, res) => __awaiter(void 0, void 0, void
 app.post("/api/signup", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     try {
-        yield connectDB();
+        yield (0, connect_1.default)();
         const { userName, lastName, email, password, dateOfBirth } = req.body;
-        console.log(req.body);
         if (!userName || !lastName || !email || !password || !dateOfBirth) {
             return res.status(400).json({
                 message: "Username and last name are required"
