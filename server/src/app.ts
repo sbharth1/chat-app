@@ -48,7 +48,7 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
    };
  };
  
-   
+  
     app.post("/api/login", asyncHandler( async (req:Request,res:Response)=>{
       try {
 
@@ -73,7 +73,6 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
          })
        }
     }));
-
 
 
  app.post("/api/signup", asyncHandler(async (req: Request,res: Response) => {

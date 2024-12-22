@@ -3,7 +3,10 @@ import { Link } from "react-router-dom"
 import { LoginFormData } from '../types';
 import axios from 'axios'
 import Cookies from 'js-cookie';
+import { loginValidateSchema } from '../types';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
    
@@ -15,14 +18,17 @@ const Login = () => {
 
   const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    e.preventDefault();
+    const { error } = loginValidateSchema.validate(loginData, { abortEarly: false });
+    if (error) {
+      console.log(error.details.map(detail => toast.error(detail.message)));
+      return;
+    }
     try{
    
    const response =  await axios.post("http://localhost:4000/api/login",loginData,{
     headers: {
       'Content-Type': 'application/json',
     },
-    
    })
    const token = response.data.token;
    Cookies.set(
@@ -56,7 +62,8 @@ const Login = () => {
         minHeight: '100vh',      
         backgroundColor: '#f4f4f9'
       }}>
-    <Container maxWidth="xs">
+        <ToastContainer/>
+     <Container maxWidth="xs">
       <Box
         sx={{
           display: 'flex',
