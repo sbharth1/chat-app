@@ -28,7 +28,8 @@ const Signup = () => {
     e.preventDefault();
     const { error } = signValidateSchema.validate(formData, { abortEarly: false });
     if (error) {
-      console.log(error.details.map(detail => toast.error(detail.message)));
+       toast.error("All feilds are required");
+       console.log(error.details[0].message);
       return;
     }
     try {

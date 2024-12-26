@@ -21,6 +21,7 @@ const Login = () => {
     const { error } = loginValidateSchema.validate(loginData, { abortEarly: false });
     if (error) {
       console.log(error.details.map(detail => toast.error(detail.message)));
+      // console.log(error);
       return;
     }
     try{

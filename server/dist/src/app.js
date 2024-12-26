@@ -60,7 +60,6 @@ app.post("/api/login", asyncHandler((req, res) => __awaiter(void 0, void 0, void
     }
 })));
 app.post("/api/signup", asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
     try {
         yield (0, connect_1.default)();
         const { userName, lastName, email, password, dateOfBirth } = req.body;

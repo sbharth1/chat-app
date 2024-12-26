@@ -57,7 +57,6 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
 
 
  app.post("/api/signup", asyncHandler(async (req: Request,res: Response) => {
-    console.log(req.body);
     try {
         await connectDB();
        const { userName, lastName,email,password,dateOfBirth} = req.body;
