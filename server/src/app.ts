@@ -1,13 +1,9 @@
- import express,{Request,Response,NextFunction} from 'express'
- import http from 'http'
- import cors from 'cors'
- import dotenv from 'dotenv'
- import User from '../models/userSchema' 
- import bcrypt from 'bcryptjs'
- import {generateToken} from '../utils/jwtUtils'
- const app = express();
- const server = http.createServer(app);
-import connectDB from '../config/connect'
+import  express  from 'express';
+import cors from 'cors'
+import dotenv from 'dotenv'
+import authRoutes from '../routes/authRoutes'
+const app = express();
+dotenv.config();
  
  app.use(cors({
       origin:"http://localhost:5173",
@@ -19,74 +15,7 @@ import connectDB from '../config/connect'
 
 
 
- dotenv.config();
- const PORT = process.env.PORT;
-
-const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
-   return (req: Request, res: 
-      Response, next: NextFunction) => {
-     Promise.resolve(fn(req, res, next)).catch(next);
-   };
- };
- 
-  
-    app.post("/api/login", asyncHandler( async (req:Request,res:Response)=>{
-      try {
-
-        await connectDB();
-        const {email,password} = req.body;
-        if(!email || !password){
-          return res.status(400).json({ 
-            message: "email and password is invalid", 
-          });
-        }
-        let result = await User.findOne({email});
-        const token = generateToken(email);
-           res.status(200).json({
-         message: "Data fetched successfully",
-         token,
-         data: result,
-       })
-       } catch (error:any) {
-         res.status(500).json({
-            message: "Server Error",
-            error: error.message,
-         })
-       }
-    }));
+app.use('/api',authRoutes)
 
 
- app.post("/api/signup", asyncHandler(async (req: Request,res: Response) => {
-    try {
-        await connectDB();
-       const { userName, lastName,email,password,dateOfBirth} = req.body;
-
-     if (!userName || !lastName || !email || !password || !dateOfBirth) {
-       return res.status(400).json({ 
-         message: "Username and last name are required" 
-      });
-     }
-   
-     const salt = await bcrypt.genSalt(15);
-     const hashPassword = await bcrypt.hash(password,salt);
-    
-
-     const user = new User({ userName, lastName,email,password:hashPassword,dateOfBirth});
-
-     await user.save();
-
-     res.status(201).json({ 
-       message: "User created successfully", 
-       user: { userName, lastName,email,dateOfBirth, }
-          });
-     } catch (error:any) {
-       res.status(500).send("Server Error: " + error.message);
-     }
- }));
-
- 
- server.listen(PORT,()=>{
-    console.log("http://localhost"+PORT);
- });
-
-
+export default app;
