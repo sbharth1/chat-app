@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { LoginFormData } from '../types';
 import axios from 'axios'
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 import { loginValidateSchema } from '../types';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
@@ -15,7 +16,7 @@ const Login = () => {
     email: '',
     password: '',
   });
-
+const navigate = useNavigate();
   const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { error } = loginValidateSchema.validate(loginData, { abortEarly: false });
@@ -37,6 +38,7 @@ const Login = () => {
     token,
     { expires: 7, secure: true, sameSite: 'Strict' }
    )
+   navigate('/dashboard')
   }catch(error){
     console.log(error + "---response error")
   }
