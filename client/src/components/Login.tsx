@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     const { error } = loginValidateSchema.validate(loginData, { abortEarly: false });
     if (error) {
-      console.log(error.details.map(detail => toast.error(detail.message)));
+      console.log(toast.error("All fields are required"));
       // console.log(error);
       return;
     }
