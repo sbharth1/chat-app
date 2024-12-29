@@ -11,5 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.home = void 0;
 const home = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.send("heelo world");
+    }
+    catch (err) {
+        console.log(err + 'err in home.ts');
+    }
 });
 exports.home = home;

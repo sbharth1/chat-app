@@ -11,7 +11,8 @@ const app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use((0, cors_1.default)({
     origin: "http://localhost:5173",
-    methods: ['GET', 'POST',]
+    methods: ['GET', 'POST',],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
