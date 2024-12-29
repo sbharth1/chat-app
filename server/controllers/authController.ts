@@ -7,7 +7,6 @@ import connectDB from '../config/connect'
   
    export const loginUser =  async (req:Request,res:Response)=>{
         try {
-  
           await connectDB();
           const {email,password} = req.body;
           if(!email || !password){
