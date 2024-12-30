@@ -3,7 +3,7 @@ import './index.css'
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
 import Signup from './components/Signup.tsx'
 import Login from './components/Login.tsx'
-import Navbar from './components/Navbar.tsx'
+import Navbar from './pages/Navbar.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <Router>
