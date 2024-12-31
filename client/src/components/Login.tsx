@@ -38,7 +38,11 @@ const navigate = useNavigate();
     token,
     { expires: 7, secure: true, sameSite: 'Strict' }
    )
+    if(response.status === 201){
    navigate('/dashboard')
+    }else{
+      console.log('error in login api')
+    }
   }catch(error){
     console.log(error + "---response error")
   }

@@ -12,7 +12,19 @@ const generateToken = (userId) => {
     return jsonwebtoken_1.default.sign({ userId }, SECRET_KEY, { expiresIn: '1h' });
 };
 exports.generateToken = generateToken;
-const verifyToken = (token) => {
-    return jsonwebtoken_1.default.verify(token, SECRET_KEY);
+const verifyToken = (req, res, next) => {
+    var _a;
+    try {
+        const token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
+        if (!token) {
+            return res.status(403).json({ "message": "No Token Provided" });
+        }
+        const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
+        req.userId = decoded.id;
+        next();
+    }
+    catch (err) {
+        return res.statusCode(500).json({ "message": "server error" });
+    }
 };
 exports.verifyToken = verifyToken;
