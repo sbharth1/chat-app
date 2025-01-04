@@ -14,7 +14,7 @@ const Navbar = () => {
           "Authorization" : `Bearer ${token}`
         }
       })
-       if(response.status!= 201){
+       if(response.statusText !== "OK"){
         navigate('/api/login')
        }
      

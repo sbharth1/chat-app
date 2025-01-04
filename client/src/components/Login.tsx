@@ -32,13 +32,14 @@ const navigate = useNavigate();
       'Content-Type': 'application/json',
     },
    })
+  //  console.log(response) 
    const token = response.data.token;
    Cookies.set(
     "token",
     token,
     { expires: 7, secure: true, sameSite: 'Strict' }
    )
-    if(response.status === 201){
+    if(response.statusText === "OK"){
    navigate('/api/dashboard')
     }else{
       console.log('error in login api')
