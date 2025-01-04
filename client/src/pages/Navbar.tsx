@@ -15,12 +15,12 @@ const Navbar = () => {
         }
       })
        if(response.status!= 201){
-        navigate('/')
+        navigate('/api/login')
        }
      
     }catch(err){
            console.log(err)
-           navigate('/')
+           navigate('/api/login')
       }
     }
     fetchUser()

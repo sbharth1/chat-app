@@ -1,15 +1,15 @@
 import { Router } from "express";
 import { loginUser,signupUser } from "../controllers/authController";
 import  asyncHandler  from "../helpers/asyncHandle";
-import { home } from "../controllers/dashboard";
+import {dashboard } from "../controllers/dashboard";
 import { verifyToken } from "../utils/jwtUtils";
 const router  = Router();
 
 // public rotues
-router.post('/login',asyncHandler(loginUser));
-router.post('/signup', asyncHandler(signupUser));
+router.post('/api/login',asyncHandler(loginUser));
+router.post('/api/signup', asyncHandler(signupUser));
 
 // private rotues
-router.get('/dashboard',verifyToken,asyncHandler(home));
+router.get('/api/dashboard',verifyToken,asyncHandler(dashboard));
 
 export default router;

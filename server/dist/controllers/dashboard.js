@@ -9,13 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.home = void 0;
-const home = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.dashboard = void 0;
+const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.send("heelo world");
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(400).json({ message: "User ID not found" });
+        }
+        res.status(200).json({ message: "Hello, welcome to your dashboard!", userId });
     }
     catch (err) {
-        console.log(err + 'err in home.ts');
+        console.error(err + ' error in dashboard.ts');
+        res.status(500).json({ message: "Server error" });
     }
 });
-exports.home = home;
+exports.dashboard = dashboard;

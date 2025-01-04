@@ -9,17 +9,18 @@
   return jwt.sign({userId},SECRET_KEY,{expiresIn:'1h'})
   }
 
-  const verifyToken = (req:Request,res:Request,next:NextFunction)=>{
+  const verifyToken = (req:Request,res:Response,next:NextFunction)=>{
+    console.log(req)
     try{
       const token = req.headers['authorization']?.split(' ')[1];
       if(!token){
         return res.status(403).json({"message":"No Token Provided"})
       }
       const decoded = jwt.verify(token,SECRET_KEY);
-      req.userId = decoded.id;
+      req.userId = decoded.userId;
       next()
     }catch(err){
-    return res.statusCode(500).json({"message":"server error"})
+    return res.status(500).json({"message":"server error"})
     }
   }
 

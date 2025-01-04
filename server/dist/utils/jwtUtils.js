@@ -14,17 +14,18 @@ const generateToken = (userId) => {
 exports.generateToken = generateToken;
 const verifyToken = (req, res, next) => {
     var _a;
+    console.log(req);
     try {
         const token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
         if (!token) {
             return res.status(403).json({ "message": "No Token Provided" });
         }
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
-        req.userId = decoded.id;
+        req.userId = decoded.userId;
         next();
     }
     catch (err) {
-        return res.statusCode(500).json({ "message": "server error" });
+        return res.status(500).json({ "message": "server error" });
     }
 };
 exports.verifyToken = verifyToken;

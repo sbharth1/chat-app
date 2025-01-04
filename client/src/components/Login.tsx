@@ -39,7 +39,7 @@ const navigate = useNavigate();
     { expires: 7, secure: true, sameSite: 'Strict' }
    )
     if(response.status === 201){
-   navigate('/dashboard')
+   navigate('/api/dashboard')
     }else{
       console.log('error in login api')
     }
