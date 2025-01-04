@@ -6,10 +6,10 @@ import { verifyToken } from "../utils/jwtUtils";
 const router  = Router();
 
 // public rotues
-router.post('/api/login',asyncHandler(loginUser));
-router.post('/api/signup', asyncHandler(signupUser));
+router.post('/login',asyncHandler(loginUser));
+router.post('/signup', asyncHandler(signupUser));
 
 // private rotues
-router.get('/api/dashboard',verifyToken,asyncHandler(dashboard));
+router.get('/dashboard',verifyToken,asyncHandler(dashboard));
 
 export default router;

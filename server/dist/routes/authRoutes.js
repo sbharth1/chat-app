@@ -10,8 +10,8 @@ const dashboard_1 = require("../controllers/dashboard");
 const jwtUtils_1 = require("../utils/jwtUtils");
 const router = (0, express_1.Router)();
 // public rotues
-router.post('/api/login', (0, asyncHandle_1.default)(authController_1.loginUser));
-router.post('/api/signup', (0, asyncHandle_1.default)(authController_1.signupUser));
+router.post('/login', (0, asyncHandle_1.default)(authController_1.loginUser));
+router.post('/signup', (0, asyncHandle_1.default)(authController_1.signupUser));
 // private rotues
-router.get('/api/dashboard', jwtUtils_1.verifyToken, (0, asyncHandle_1.default)(dashboard_1.dashboard));
+router.get('/dashboard', jwtUtils_1.verifyToken, (0, asyncHandle_1.default)(dashboard_1.dashboard));
 exports.default = router;
