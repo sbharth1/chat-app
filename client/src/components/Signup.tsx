@@ -8,20 +8,21 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
-  const [formData, setFormData] = useState<SignupFormData>({
+  const allValues = {
     userName: "",
     lastName: "",
     email: "",
     password: "",
     dateOfBirth: ""
-  });
+  };
+  const [formData, setFormData] = useState<SignupFormData>(allValues);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+       setFormData((prev)=> (
+        {...prev, [name]:value})
+      )
+
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -41,13 +42,7 @@ const Signup = () => {
     } catch (error) {
       console.log(error + "---response error");
     }
-    setFormData({
-      userName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      dateOfBirth: ""
-    });
+    setFormData(allValues);
   };
 
   return (<>

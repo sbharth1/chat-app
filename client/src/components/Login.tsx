@@ -11,11 +11,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
    
-
-  const [loginData, setLoginData] = useState<LoginFormData>({
+  const allValue =  {
     email: '',
     password: '',
-  });
+  };
+
+  const [loginData, setLoginData] = useState<LoginFormData>(allValue);
 const navigate = useNavigate();
   const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,19 +48,17 @@ const navigate = useNavigate();
   }catch(error){
     console.log(error + "---response error")
   }
-   setLoginData({
-    email: "",
-    password: "",
-   })
+   setLoginData(allValue)
     alert('Login up successful!');
   };
 
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setLoginData({
-      ...loginData,
-      [name]: value
-    });
+
+    setLoginData((prev)=> (
+      {...prev, [name]:value}
+    ))
+
   };
 
   return (<>
