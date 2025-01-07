@@ -1,11 +1,11 @@
 import { useEffect } from "react"
-import Cookies from "js-cookie"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import Cookies from "js-cookie";
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -14,6 +14,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Navbar = () => {
   const navigate = useNavigate()
+
+  // logout func
+  const onLogOut = ()=>{
+    Cookies.remove('token')
+     navigate('/')
+  }
+
+
   useEffect(()=>{
     const fetchUser = async()=>{
       try{
@@ -51,6 +59,7 @@ const Navbar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Navbar
           </Typography>
+          <Button color="inherit" variant="outlined" onClick={onLogOut}>Log out</Button>
           <Button color="inherit"><AccountCircleIcon/></Button>
         </Toolbar>
       </AppBar>
