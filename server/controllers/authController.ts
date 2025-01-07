@@ -14,12 +14,27 @@ import connectDB from '../config/connect'
               message: "email and password is invalid", 
             });
           }
-          let result = await User.findOne({email});
+          const user = await User.findOne({ email });
+          if (!user) {
+            return res.status(404).json({
+              message: "User not found",
+            });
+          }
+      
+          const isPasswordCorrect = await bcrypt.compare(password, user.password);
+          if (!isPasswordCorrect) {
+            return res.status(401).json({
+              message: "Invalid password",
+            });
+          }
           const token = generateToken(email);
              res.status(200).json({
            message: "Data fetched successfully",
            token,
-           data: result,
+           data: {
+            userName: user.userName,
+            email:user.email
+          },
          })
          } catch (error:any) {
            res.status(500).json({

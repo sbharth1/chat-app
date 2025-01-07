@@ -4,7 +4,7 @@ import Joi from "joi";
     email:string,
     password:string,
   }
-
+ 
   export interface SignupFormData {
       userName:string,
       lastName:string,
@@ -12,7 +12,7 @@ import Joi from "joi";
       password:string,
       dateOfBirth:string
     }
-  
+
 
      export  const signValidateSchema = Joi.object({
         userName: Joi.string().required().label("UserName"),

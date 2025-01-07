@@ -1,185 +1,75 @@
-// import  React, { FormEvent, useState } from 'react';
-// import { Link } from "react-router-dom"
-// import { LoginFormData } from '../types';
-// import axios from 'axios'
-// import Cookies from 'js-cookie';
-// import { useNavigate } from 'react-router-dom';
-// import { loginValidateSchema } from '../types';
-// import { TextField, Button, Container, Box, Typography } from '@mui/material';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-
-// const Login = () => {
-   
-//   const allValue =  {
-//     email: '',
-//     password: '',
-//   };
-
-//   const [loginData, setLoginData] = useState<LoginFormData>(allValue);
-// const navigate = useNavigate();
-//   const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     const { error } = loginValidateSchema.validate(loginData, { abortEarly: false });
-//     if (error) {
-//       console.log(toast.error("All fields are required"));
-//       // console.log(error);
-//       return;
-//     }
-//     try{
-   
-//    const response =  await axios.post("http://localhost:4000/api/login",loginData,{
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//    })
-//   //  console.log(response) 
-//    const token = response.data.token;
-//    Cookies.set(
-//     "token",
-//     token,
-//     { expires: 7, secure: true, sameSite: 'Strict' }
-//    )
-//     if(response.statusText === "OK"){
-//    navigate('/api/dashboard')
-//     }else{
-//       console.log('error in login api')
-//     }
-//   }catch(error){
-//     console.log(error + "---response error")
-//   }
-//    setLoginData(allValue)
-//     alert('Login up successful!');
-//   };
-
-//   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-
-//     setLoginData((prev)=> (
-//       {...prev, [name]:value}
-//     ))
-
-//   };
-
-//   return (<>
-//   <Box  sx={{
-//         display: 'flex',
-//         justifyContent: 'center', 
-//         alignItems: 'center',     
-//         minHeight: '100vh',      
-//         backgroundColor: '#f4f4f9'
-//       }}>
-//         <ToastContainer/>
-//      <Container maxWidth="xs">
-//       <Box
-//         sx={{
-//           display: 'flex',
-//           flexDirection: 'column',
-//          alignItems: 'center',
-//           padding: 3,
-//           borderRadius: 2,
-//           boxShadow: 3,
-//           backgroundColor: '#fff'
-//         }}
-//       >
-//         <Typography variant="h5" gutterBottom>
-//           Login
-//         </Typography>
-
-//         <form onSubmit={handleSubmit} style={{ width: '100%' }}>          
-//           <TextField
-//             label="Email"
-//             variant="outlined"
-//             fullWidth
-//             margin="normal"
-//             name="email"
-//             value={loginData.email}
-//             onChange={handleChange}
-//           />
-          
-//           <TextField
-//             label="Password"
-//             variant="outlined"
-//             type="password"
-//             fullWidth
-//             margin="normal"
-//             name="password"
-//             value={loginData.password}
-//             onChange={handleChange}
-//           />
-
-//           <Button
-//             type="submit"
-//             variant="contained"
-//             color="primary"
-//             fullWidth
-//             sx={{ mt: 2 }}
-//           >
-//             Sign Up
-//           </Button>
-//         </form>
-//       </Box>
-//       <Button
-//       variant="contained"
-//       color="primary"
-//       sx={{
-//         padding: '2px 10px',
-//         fontSize: '1rem',
-//         textTransform: 'none',
-//         boxShadow: 2,
-//         '&:hover': {
-//           boxShadow: 4,
-//         },
-//       }}
-//     >
-//       <Link to={"/api/signup"}>Create a Account</Link>
-//     </Button> 
-//     </Container>
-//     </Box>
-//     </>
-//   );
-// };
-
-// export default Login;
-
-
-
-
-
-
 import React, { FormEvent, useState } from 'react';
 import { Link } from "react-router-dom";
 import { LoginFormData } from '../types';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { loginValidateSchema } from '../types';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2'
 
 const Login = () => {
   const initialValue = {
     email: '',
     password: '',
   };
+  const navigate = useNavigate();
 
   const [loginData, setLoginData] = useState<LoginFormData>(initialValue);
-  const navigate = useNavigate();
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  
+  const validateEmail = (email: string) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return regex.test(email);
+  };
+
+  const validatePassword = (password: string) => {
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+    return regex.test(password);
+  };
+  
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { error } = loginValidateSchema.validate(loginData, { abortEarly: false });
-    if (error) {
-      toast.error("All fields are required");
+
+    setErrors({});
+
+    let isValid = true;
+    const newErrors: { [key: string]: string } = {}; 
+
+
+    if (!validateEmail(loginData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    if (!validatePassword(loginData.password)) {
+      newErrors.password = 'Password must be at least 6 characters long and contain at least one letter and one number';
+      isValid = false;
+    }
+    
+    if (!isValid) {
+      setErrors(newErrors); 
       return;
     }
+
+    
     try {
-      const response = await axios.post("http://localhost:4000/api/login", loginData, {
+      setLoginData(initialValue);
+      const response = await axios.post("http://localhost:4000/api/login" , loginData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
+            Swal.fire({
+              title: 'Success!',
+              text: 'Your account login successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+              keydownListenerCapture:true
+            });
+
       const token = response.data.token;
       Cookies.set("token", token, { expires: 7, secure: true, sameSite: 'Strict' });
       if (response.statusText === "OK") {
@@ -187,11 +77,16 @@ const Login = () => {
       } else {
         console.log('Error in login API');
       }
-    } catch (error) {
+    } catch (error:any) {
       console.log(error + "---response error");
+        Swal.fire({
+              title: 'Error!',
+              text: error.response?.data?.message || 'There was an issue with your signup. Please try again later.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+              keydownListenerCapture:true
+            });
     }
-    setLoginData(initialValue);
-    toast.success('Login successful!');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -210,7 +105,6 @@ const Login = () => {
           backgroundColor: '#f4f4f9',
         }}
       >
-        <ToastContainer />
         <Container maxWidth="xs">
           <Box
             sx={{
@@ -236,6 +130,8 @@ const Login = () => {
                 name="email"
                 value={loginData.email}
                 onChange={handleChange}
+                error={!!errors.email}
+                helperText={errors.email}
               />
               <TextField
                 label="Password"
@@ -245,6 +141,8 @@ const Login = () => {
                 margin="normal"
                 name="password"
                 value={loginData.password}
+                error={!!errors.password}
+                helperText={errors.password}
                 onChange={handleChange}
               />
               <Button

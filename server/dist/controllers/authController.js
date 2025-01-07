@@ -26,12 +26,26 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 message: "email and password is invalid",
             });
         }
-        let result = yield userSchema_1.default.findOne({ email });
+        const user = yield userSchema_1.default.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
+        const isPasswordCorrect = yield bcryptjs_1.default.compare(password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(401).json({
+                message: "Invalid password",
+            });
+        }
         const token = (0, jwtUtils_1.generateToken)(email);
         res.status(200).json({
             message: "Data fetched successfully",
             token,
-            data: result,
+            data: {
+                userName: user.userName,
+                email: user.email
+            },
         });
     }
     catch (error) {
