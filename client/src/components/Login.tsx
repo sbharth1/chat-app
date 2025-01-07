@@ -119,7 +119,7 @@ const navigate = useNavigate();
           </Button>
         </form>
       </Box>
-    <Link to={"/signup"}>Signup page</Link> 
+    <Link to={"/api/signup"}>Signup page</Link> 
     </Container>
     </Box>
     </>

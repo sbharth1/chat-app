@@ -131,7 +131,7 @@ const Signup = () => {
         </Button>
       </form>
     </Box>
-  <Link to={"/"}>Login page</Link> 
+  <Link to={"/api/login"}>Login page</Link> 
   </Container>
   </Box> 
   </>

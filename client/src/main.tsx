@@ -13,6 +13,7 @@ createRoot(document.getElementById('root')!).render(
       {/* public routes */}
       <Route path="*" element={<NotFound/>}></Route>
       <Route path="/api/login" element={<Login/>}></Route>
+      <Route path="/" element={<Login/>}></Route>
       <Route path="/api/signup" element={<Signup/>}></Route>
 
       {/* private routes  */}
