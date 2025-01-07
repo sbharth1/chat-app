@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')!).render(
 
       {/* private routes  */}
       <Route path="/api/dashboard" element={<Navbar/>}></Route>
-      <Route path="/api/forget-password" element={<ForgetPassword/>}></Route>
+      <Route path="/api/forgot-password" element={<ForgetPassword/>}></Route>
       <Route path="/api/user" element={<UserProfile/>}></Route>
       </Routes> 
   </Router>

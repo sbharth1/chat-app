@@ -1,4 +1,3 @@
-import Joi from "joi";
 
   export interface LoginFormData {
     email:string,
@@ -14,17 +13,13 @@ import Joi from "joi";
     }
 
 
-     export  const signValidateSchema = Joi.object({
-        userName: Joi.string().required().label("UserName"),
-        lastName: Joi.string().required().label("LastName"),
-        email: Joi.string().email({ tlds: { allow: false } }).required().label("Email"),
-        password: Joi.string().min(6).required().label("Password"),
-        dateOfBirth: Joi.date().required().label("dateOfBirth")
-      }); 
 
-    export const loginValidateSchema = Joi.object({
-          email: Joi.string().email({ tlds: { allow: false } }).required().label("Email"),
-          password: Joi.string().min(6).required().label("Password"),
-        }); 
+ export  const validateEmail = (email: string) => {
+   const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+   return regex.test(email);
+ };
 
-         
+    export  const validatePassword = (password: string) => {
+             const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+             return regex.test(password);
+    };

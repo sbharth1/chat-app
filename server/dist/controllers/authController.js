@@ -44,7 +44,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             token,
             data: {
                 userName: user.userName,
-                email: user.email
+                email: user.email,
             },
         });
     }
@@ -62,16 +62,22 @@ const signupUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { userName, lastName, email, password, dateOfBirth } = req.body;
         if (!userName || !lastName || !email || !password || !dateOfBirth) {
             return res.status(400).json({
-                message: "Username and last name are required"
+                message: "Username and last name are required",
             });
         }
         const salt = yield bcryptjs_1.default.genSalt(15);
         const hashPassword = yield bcryptjs_1.default.hash(password, salt);
-        const user = new userSchema_1.default({ userName, lastName, email, password: hashPassword, dateOfBirth });
+        const user = new userSchema_1.default({
+            userName,
+            lastName,
+            email,
+            password: hashPassword,
+            dateOfBirth,
+        });
         yield user.save();
         res.status(201).json({
             message: "User created successfully",
-            user: { userName, lastName, email, dateOfBirth, }
+            user: { userName, lastName, email, dateOfBirth },
         });
     }
     catch (error) {
