@@ -9,9 +9,9 @@ const router  = Router();
 // public rotues
 router.post('/login',asyncHandler(loginUser));
 router.post('/signup', asyncHandler(signupUser));
+router.post("/forgot-password",asyncHandler(forgetPassword));
 
 // private rotues
 router.get('/dashboard',verifyToken,asyncHandler(dashboard));
-router.post("/forgot-password",asyncHandler(forgetPassword));
 
 export default router;

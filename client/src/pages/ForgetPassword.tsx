@@ -1,8 +1,11 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ForgetPassword = () => {
+  const navigate = useNavigate()
   const [forgetPasswordEmail, SetForgetPasswordEmail] = useState<
     string | undefined
   >();
@@ -23,9 +26,31 @@ const ForgetPassword = () => {
             "Content-Type": "application/json",
           },
        })
+       Swal.fire({
+               title: "Success!",
+               text: "Your Reset Password Request Send check your inbox.",
+               icon: "success",
+               confirmButtonText: "OK",
+               keydownListenerCapture: true,
+               timer:3000
+             });
+             if (response.statusText === "OK") {
+                     SetForgetPasswordEmail("")
+                     navigate('/api/login')
+            } 
        console.log(response)
-    }catch(error){
+    }catch(error:any){
       console.log(error,'--error from forgotten password')
+       Swal.fire({
+              title: "Error!",
+              text:
+                error.response?.data?.message ||
+                "There was an issue with your email. Please try again later.",
+              icon: "error",
+              confirmButtonText: "OK",
+              keydownListenerCapture: true,
+              timer:2000
+            });
     }
   
 

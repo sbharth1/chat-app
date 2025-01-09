@@ -69,7 +69,10 @@ export const signupUser = async (req: Request, res: Response) => {
 
     res.status(201).json({
       message: "User created successfully",
-      user: { userName, lastName, email, dateOfBirth },
+      data: {
+        userName:user.userName,
+        Email:user.email
+      },
     });
   } catch (error: any) {
     res.status(500).send("Server Error: " + error.message);

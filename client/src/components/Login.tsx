@@ -59,6 +59,7 @@ const Login = () => {
         icon: "success",
         confirmButtonText: "OK",
         keydownListenerCapture: true,
+        timer:2000
       });
 
       const token = response.data.token;

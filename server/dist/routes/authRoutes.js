@@ -13,7 +13,7 @@ const router = (0, express_1.Router)();
 // public rotues
 router.post('/login', (0, asyncHandle_1.default)(authController_1.loginUser));
 router.post('/signup', (0, asyncHandle_1.default)(authController_1.signupUser));
+router.post("/forgot-password", (0, asyncHandle_1.default)(forgotPassword_1.forgetPassword));
 // private rotues
 router.get('/dashboard', jwtUtils_1.verifyToken, (0, asyncHandle_1.default)(dashboard_1.dashboard));
-router.post("/forgot-password", (0, asyncHandle_1.default)(forgotPassword_1.forgetPassword));
 exports.default = router;

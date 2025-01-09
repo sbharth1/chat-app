@@ -77,7 +77,10 @@ const signupUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         yield user.save();
         res.status(201).json({
             message: "User created successfully",
-            user: { userName, lastName, email, dateOfBirth },
+            data: {
+                userName: user.userName,
+                Email: user.email
+            },
         });
     }
     catch (error) {
