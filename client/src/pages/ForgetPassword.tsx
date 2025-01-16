@@ -5,56 +5,58 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const ForgetPassword = () => {
-  const navigate = useNavigate()
-  const [forgetPasswordEmail, SetForgetPasswordEmail] = useState<
+  const navigate = useNavigate();
+  const [email, SetEmail] = useState<
     string | undefined
   >();
-  const [errors,setErrors] = useState<string | undefined>("");
+  const [errors, setErrors] = useState<string | undefined>("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    SetForgetPasswordEmail(e.target.value);
+    SetEmail(e.target.value);
   };
 
-  const ForgetPasswordHandle =async (e: React.FormEvent<HTMLFormElement>)=>{
+  const ForgotPasswordHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrors("");
-    if(!forgetPasswordEmail?.includes('@')){
-      setErrors("Inavalide Email"); 
+    if (!email?.includes("@")) {
+      setErrors("Inavalide Email");
     }
-    try{
-       const response = await axios.post("http://localhost:4000/api/forgot-password",{forgetPasswordEmail},{
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/forgot-password",
+        {email},
+        {
           headers: {
             "Content-Type": "application/json",
           },
-       })
-       Swal.fire({
-               title: "Success!",
-               text: "Your Reset Password Request Send check your inbox.",
-               icon: "success",
-               confirmButtonText: "OK",
-               keydownListenerCapture: true,
-               timer:3000
-             });
-             if (response.statusText === "OK") {
-                     SetForgetPasswordEmail("")
-                     navigate('/api/login')
-            } 
-       console.log(response)
-    }catch(error:any){
-      console.log(error,'--error from forgotten password')
-       Swal.fire({
-              title: "Error!",
-              text:
-                error.response?.data?.message ||
-                "There was an issue with your email. Please try again later.",
-              icon: "error",
-              confirmButtonText: "OK",
-              keydownListenerCapture: true,
-              timer:2000
-            });
+        }
+      );
+      Swal.fire({
+        title: "Success!",
+        text: "Your Reset Password Request Send check your inbox.",
+        icon: "success",
+        confirmButtonText: "OK",
+        keydownListenerCapture: true,
+        timer: 4000,
+      });
+      if (response.statusText === "OK") {
+        SetEmail("");
+        // navigate("/api/login");
+      }
+      console.log(response);
+    } catch (error: any) {
+      console.log(error, "--error from forgotten password");
+      Swal.fire({
+        title: "Error!",
+        text:
+          error.response?.data?.message ||
+          "There was an issue with your email. Please try again later.",
+        icon: "error",
+        confirmButtonText: "OK",
+        keydownListenerCapture: true,
+        timer: 4000,
+      });
     }
-  
-
-  }
+  };
 
   return (
     <Box
@@ -79,10 +81,10 @@ const ForgetPassword = () => {
           }}
         >
           <Typography variant="h5" gutterBottom>
-            Find your mail
+            Find Your Account 
           </Typography>
 
-          <form style={{ width: "100%" }} onSubmit={ForgetPasswordHandle}>
+          <form style={{ width: "100%" }} onSubmit={ForgotPasswordHandle}>
             <TextField
               label="Email"
               variant="outlined"
@@ -91,7 +93,7 @@ const ForgetPassword = () => {
               name="email"
               error={!!errors}
               helperText={errors}
-              value={forgetPasswordEmail}
+              value={email}
               onChange={handleChange}
             />
 
