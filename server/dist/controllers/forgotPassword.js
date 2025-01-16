@@ -28,17 +28,17 @@ const transporter = nodemailer_1.default.createTransport({
     }
 });
 const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, connect_1.default)();
     try {
-        const { forgotPassword } = req.body;
-        console.log(forgotPassword);
-        if (!forgotPassword) {
+        yield (0, connect_1.default)();
+        const { email } = req.body;
+        console.log(exports.forgotPassword);
+        if (!exports.forgotPassword) {
             return res.status(400).json({ message: "Email is required" });
         }
-        const user = yield userSchema_1.default.findOne({ email: forgotPassword });
+        const user = yield userSchema_1.default.findOne({ email });
         if (!user) {
-            return res.status(200).json({
-                message: "Invalid user"
+            return res.status(404).json({
+                message: "Invalid user",
             });
         }
         const resetToken = jsonwebtoken_1.default.sign({
@@ -74,8 +74,8 @@ const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.forgotPassword = forgotPassword;
 const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, connect_1.default)();
     try {
+        yield (0, connect_1.default)();
         const { token, newPassword } = req.body;
         if (!token || !newPassword) {
             return res.status(400).json({ message: "Missing required fields" });

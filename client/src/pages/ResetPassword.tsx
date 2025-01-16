@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
@@ -9,6 +9,7 @@ const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
 
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -31,7 +32,6 @@ const ResetPassword = () => {
       if (response.ok) {
         setMessage('Password reset successful');
         
-        // Optional: Handle automatic login with returned auth token
         if (data.token) {
           localStorage.setItem('authToken', data.token);
         }
@@ -42,6 +42,7 @@ const ResetPassword = () => {
       }
     } catch (error) {
       setMessage('An error occurred. Please try again.');
+      console.log(error)
     } finally {
       setIsLoading(false);
     }
@@ -58,8 +59,6 @@ const ResetPassword = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             className="w-full p-2 border rounded"
-            required
-            minLength={8}
           />
         </div>
         <div className="mb-4">
@@ -69,8 +68,7 @@ const ResetPassword = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full p-2 border rounded"
-            required
-            minLength={8}
+    
           />
         </div>
         <button

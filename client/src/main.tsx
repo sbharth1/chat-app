@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')!).render(
       <Route path="/api/dashboard" element={<Navbar/>}></Route>
       <Route path="/api/forgot-password" element={<ForgetPassword/>}></Route>
       <Route path="/api/user" element={<UserProfile/>}></Route>
-      <Route path="/api/reset-password" element={<ResetPassword/>}></Route>
+      <Route path="/api/reset-password/:token" element={<ResetPassword/>}></Route>
       </Routes>  
   </Router>
 )

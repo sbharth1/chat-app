@@ -17,8 +17,8 @@ const transporter = nodemailer.createTransport({
 });
 
 export const forgotPassword = async (req: Request, res: Response) => {
-  await connectDB();
   try {
+    await connectDB();
     const {email} = req.body;
     console.log(forgotPassword)
     if (!forgotPassword) {
@@ -27,9 +27,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     const user = await User.findOne({email});
     if (!user) {
-      return res.status(200).json({ 
-        message: "Invalid user" 
-      });
+      return res.status(404).json({ 
+        message: "Invalid user",
+         });
     }
     const resetToken = jwt.sign(
       { 
@@ -72,8 +72,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
 };
 
 export const resetPassword = async (req: Request, res: Response) => {
-  await connectDB();
   try {
+    await connectDB();
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {

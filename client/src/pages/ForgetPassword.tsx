@@ -9,7 +9,8 @@ const ForgetPassword = () => {
   const [email, SetEmail] = useState<
     string | undefined
   >();
-  const [errors, setErrors] = useState<string | undefined>("");
+
+   const [errors, setErrors] = useState<string | undefined>("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     SetEmail(e.target.value);
   };
@@ -18,7 +19,7 @@ const ForgetPassword = () => {
     e.preventDefault();
     setErrors("");
     if (!email?.includes("@")) {
-      setErrors("Inavalide Email");
+      setErrors("Inavalid Email");
     }
     try {
       const response = await axios.post(
@@ -30,15 +31,16 @@ const ForgetPassword = () => {
           },
         }
       );
-      Swal.fire({
-        title: "Success!",
-        text: "Your Reset Password Request Send check your inbox.",
-        icon: "success",
-        confirmButtonText: "OK",
-        keydownListenerCapture: true,
-        timer: 4000,
-      });
+     
       if (response.statusText === "OK") {
+        Swal.fire({
+          title: "Success!",
+          text: "Your Reset Password Request Send check your inbox.",
+          icon: "success",
+          confirmButtonText: "OK",
+          keydownListenerCapture: true,
+          timer: 4000,
+        });
         SetEmail("");
         // navigate("/api/login");
       }
@@ -108,7 +110,7 @@ const ForgetPassword = () => {
             </Button>
           </form>
         </Box>
-      </Container>
+      </Container>  
     </Box>
   );
 };
