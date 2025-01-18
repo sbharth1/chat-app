@@ -1,15 +1,13 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const ForgetPassword = () => {
-  const navigate = useNavigate();
   const [email, SetEmail] = useState<
     string | undefined
   >();
-
+  const [isLoading, setIsLoading] = useState(false);
    const [errors, setErrors] = useState<string | undefined>("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     SetEmail(e.target.value);
@@ -21,7 +19,9 @@ const ForgetPassword = () => {
     if (!email?.includes("@")) {
       setErrors("Inavalid Email");
     }
+
     try {
+      setIsLoading(true)
       const response = await axios.post(
         "http://localhost:4000/api/forgot-password",
         {email},
@@ -42,22 +42,22 @@ const ForgetPassword = () => {
           timer: 4000,
         });
         SetEmail("");
-        // navigate("/api/login");
       }
       console.log(response);
-    } catch (error: any) {
+    } catch (error:any) {
       console.log(error, "--error from forgotten password");
       Swal.fire({
         title: "Error!",
         text:
-          error.response?.data?.message ||
-          "There was an issue with your email. Please try again later.",
+        error.response?.data?.message ||
+        "There was an issue with your email. Please try again later.",
         icon: "error",
         confirmButtonText: "OK",
         keydownListenerCapture: true,
         timer: 4000,
       });
     }
+    setIsLoading(false)
   };
 
   return (
@@ -105,8 +105,9 @@ const ForgetPassword = () => {
               color="primary"
               fullWidth
               sx={{ mt: 2 }}
+              disabled={isLoading}
             >
-              Find
+              {isLoading ? "Finding..." : "Find"}
             </Button>
           </form>
         </Box>

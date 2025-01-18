@@ -3,10 +3,11 @@ import User from "../models/userSchema";
 import connectDB from "../config/connect";
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
+import bcrypt from 'bcryptjs'
 import dotenv from "dotenv";
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'hey-nigga!!';
+const JWT_SECRET = process.env.SECRET_KEY || 'hey-nigga!!';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -75,17 +76,20 @@ export const resetPassword = async (req: Request, res: Response) => {
   try {
     await connectDB();
     const { token, newPassword } = req.body;
+    console.log(token,'--recieved token')
 
     if (!token || !newPassword) {
       return res.status(400).json({ message: "Missing required fields" });
     }
     let decodedToken;
     try {
-      decodedToken = jwt.verify(token, JWT_SECRET) as {
+      console.log(JWT_SECRET,'---jwt secret key ')
+      decodedToken = jwt.verify(token, JWT_SECRET) as { 
         userId: string;
         email: string;
-        type: string;
+        type: string; 
       };
+      console.log(decodedToken,'---decoed token')
     } catch (error) {
       return res.status(400).json({ 
         message: "Invalid or expired reset token" 
@@ -99,23 +103,26 @@ export const resetPassword = async (req: Request, res: Response) => {
     }
 
     const user = await User.findOne({
-      _id: decodedToken.userId,
       email: decodedToken.email,
-      passwordResetExpires: { $gt: Date.now() }
     });
+    console.log(user,'---user')
 
     if (!user) {
       return res.status(400).json({ 
         message: "Invalid or expired reset token" 
       });
     }
-
+    console.log(user.passwordResetToken,'----passwordresettoken')
     const tokenSignature = token.split('.')[2];
+    console.log(tokenSignature,'------token signature')
     if (user.passwordResetToken !== tokenSignature) {
       return res.status(400).json({ 
         message: "Invalid reset token" 
       });
     }
+
+     const salt = await bcrypt.genSalt(15);
+     await bcrypt.hash(newPassword, salt);
 
     user.password = newPassword; 
     user.passwordResetToken = undefined;

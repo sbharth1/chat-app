@@ -16,7 +16,7 @@ const Signup = () => {
     password: "",
     dateOfBirth: "",
   };
-
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<SignupFormData>(allValues);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -67,7 +67,7 @@ const Signup = () => {
     }
 
     try {
-      setFormData(allValues);
+      setIsLoading(true)
       const response = await axios.post(
         "http://localhost:4000/api/signup",
         formData,
@@ -77,7 +77,8 @@ const Signup = () => {
           },
         }
       );
-
+      setFormData(allValues);
+      
       Swal.fire({
         title: "Success!",
         text: "Your account has been created successfully.",
@@ -108,6 +109,7 @@ const Signup = () => {
         general: "There was an issue with your signup. Please try again later.",
       });
     }
+    setIsLoading(false)
   };
 
   return (
@@ -203,9 +205,10 @@ const Signup = () => {
                 variant="contained"
                 color="primary"
                 fullWidth
+                disabled={isLoading}
                 sx={{ mt: 2 }}
               >
-                Sign Up
+                {isLoading ? "Sign Up..." : "Sign Up"}
               </Button>
             </form>
 

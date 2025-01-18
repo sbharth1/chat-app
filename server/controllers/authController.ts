@@ -54,15 +54,14 @@ export const signupUser = async (req: Request, res: Response) => {
       });
     }
 
-    const salt = await bcrypt.genSalt(15);
-    const hashPassword = await bcrypt.hash(password, salt);
-
     const user = new User({
       userName,
       lastName,
       email,
-      password: hashPassword,
+      password,
       dateOfBirth,
+      passwordResetToken:"",
+      passwordResetExpires:""
     });
 
     await user.save();

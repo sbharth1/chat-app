@@ -5,7 +5,6 @@ import Signup from './components/Signup.tsx'
 import Login from './components/Login.tsx'
 import Navbar from './pages/Navbar.tsx'
 import NotFound from './pages/NotFound.tsx'
-import UserProfile from './pages/UserProfile.tsx'
 import ForgetPassword from './pages/ForgetPassword.tsx'
 import App from './App.tsx'
 import ResetPassword from './pages/ResetPassword.tsx'
@@ -22,8 +21,7 @@ createRoot(document.getElementById('root')!).render(
       {/* private routes  */}
       <Route path="/api/dashboard" element={<Navbar/>}></Route>
       <Route path="/api/forgot-password" element={<ForgetPassword/>}></Route>
-      <Route path="/api/user" element={<UserProfile/>}></Route>
-      <Route path="/api/reset-password/:token" element={<ResetPassword/>}></Route>
+        <Route path="/api/reset-password/:token" element={<ResetPassword/>}></Route>
       </Routes>  
   </Router>
 )

@@ -65,14 +65,14 @@ const signupUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 message: "Username and last name are required",
             });
         }
-        const salt = yield bcryptjs_1.default.genSalt(15);
-        const hashPassword = yield bcryptjs_1.default.hash(password, salt);
         const user = new userSchema_1.default({
             userName,
             lastName,
             email,
-            password: hashPassword,
+            password,
             dateOfBirth,
+            passwordResetToken: "",
+            passwordResetExpires: ""
         });
         yield user.save();
         res.status(201).json({

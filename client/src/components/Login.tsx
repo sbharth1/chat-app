@@ -13,6 +13,8 @@ const Login = () => {
     email: "",
     password: "",
   };
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const [loginData, setLoginData] = useState<LoginFormData>(initialValue);
@@ -43,7 +45,7 @@ const Login = () => {
     }
 
     try {
-      setLoginData(initialValue);
+      setIsLoading(true)
       const response = await axios.post(
         "http://localhost:4000/api/login",
         loginData,
@@ -53,6 +55,7 @@ const Login = () => {
           },
         }
       );
+      setLoginData(initialValue);
       Swal.fire({
         title: "Success!",
         text: "Your account login successfully.",
@@ -85,6 +88,8 @@ const Login = () => {
         keydownListenerCapture: true,
       });
     }
+    setIsLoading(false)
+
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,8 +154,9 @@ const Login = () => {
                 color="primary"
                 fullWidth
                 sx={{ mt: 2 }}
+                disabled={isLoading}
               >
-                Login
+                {isLoading ? "Login..." : "Login"}
               </Button>
             </form>
 

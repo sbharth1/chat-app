@@ -17,9 +17,10 @@ const userSchema_1 = __importDefault(require("../models/userSchema"));
 const connect_1 = __importDefault(require("../config/connect"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const JWT_SECRET = process.env.JWT_SECRET || 'hey-nigga!!';
+const JWT_SECRET = process.env.SECRET_KEY || 'hey-nigga!!';
 const transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
     auth: {
@@ -77,12 +78,15 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         yield (0, connect_1.default)();
         const { token, newPassword } = req.body;
+        console.log(token, '--recieved token');
         if (!token || !newPassword) {
             return res.status(400).json({ message: "Missing required fields" });
         }
         let decodedToken;
         try {
+            console.log(JWT_SECRET, '---jwt secret key ');
             decodedToken = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+            console.log(decodedToken, '---decoed token');
         }
         catch (error) {
             return res.status(400).json({
@@ -95,21 +99,24 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             });
         }
         const user = yield userSchema_1.default.findOne({
-            _id: decodedToken.userId,
             email: decodedToken.email,
-            passwordResetExpires: { $gt: Date.now() }
         });
+        console.log(user, '---user');
         if (!user) {
             return res.status(400).json({
                 message: "Invalid or expired reset token"
             });
         }
+        console.log(user.passwordResetToken, '----passwordresettoken');
         const tokenSignature = token.split('.')[2];
+        console.log(tokenSignature, '------token signature');
         if (user.passwordResetToken !== tokenSignature) {
             return res.status(400).json({
                 message: "Invalid reset token"
             });
         }
+        const salt = yield bcryptjs_1.default.genSalt(15);
+        yield bcryptjs_1.default.hash(newPassword, salt);
         user.password = newPassword;
         user.passwordResetToken = undefined;
         user.passwordResetExpires = undefined;
